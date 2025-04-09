@@ -2,7 +2,7 @@
   "name": "tu-restaurante-backend",
   "version": "1.0.0",
   "description": "API para el sistema de reservas del restaurante",
-  "main": "dist/server.js",
+  "main": "src/server.js",
   "type": "module",
   "license": "MIT",
   "author": "JorgeCoder02",
