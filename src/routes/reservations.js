@@ -3,6 +3,7 @@ import { Router } from "express";
 const router = Router();
 
 import { Availability } from "../models/reservation.js"; // Importar el modelo de disponibilidad
+import { Contacto } from "../models/contacto.js"; // Importar el modelo de disponibilidad
 
 // Ruta get
 router.get("/create", async (req, res) => {
