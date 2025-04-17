@@ -74,9 +74,21 @@ router.post("/create", async (req, res) => {
   }
 });
 
+// 📝 GET: formulario
+router.get("/contact", async (req, res) => {
+  try {
+    return res.json({ msg: "Ruta de disponibilidad de contacto" });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ err: "Error al obtener disponibilidad de contacto" });
+  }
+});
+
 // 📝 POST: Crear post de contacto (formulario)
 router.post("/contact", async (req, res) => {
   const { name, email, message } = req.body;
+  console.log("Recibida petición de contacto:", req.body);
   // ❌ Validar que los campos no estén vacíos
   if (name === "" || email === "" || message === "") {
     return res.status(400).json({ err: "Rellena todos los campos" });
@@ -87,9 +99,9 @@ router.post("/contact", async (req, res) => {
     return res.status(400).json({ err: "Email no válido" });
   }
 
-  // Crear un id único a partir de fecha y hora
-  const date = new Date(fecha);
-  const id = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}-${hora}`; // Formato YYYY-MM-DD-HH:MM
+  // Crear id único
+  const now = new Date();
+  const id = `${now.getTime()}-${Math.floor(Math.random() * 1000)}`;
 
   // ✅ Crear nuevo msg de contacto
   try {
@@ -100,7 +112,7 @@ router.post("/contact", async (req, res) => {
       message: message,
     });
     await newContacto.save();
-    return res.status(201).json({ message: "Mensaje enviado correctamente" });
+    return res.status(200).json({ message: "Mensaje enviado correctamente" });
   } catch (error) {
     return res.status(400).json({
       err: error.message || "Error del servidor. Inténtalo más tarde",
