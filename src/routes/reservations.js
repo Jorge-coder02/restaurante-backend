@@ -3,6 +3,7 @@ import { Router } from "express";
 const router = Router();
 
 import { Availability } from "../models/reservation.js"; // Importar el modelo de disponibilidad
+import { Contacto } from "../models/contacto.js"; // Importar el modelo de contacto
 
 // Ruta get
 router.get("/create", async (req, res) => {
@@ -74,12 +75,37 @@ router.post("/create", async (req, res) => {
   }
 });
 
-// 📝 Ruta Contacto (formulario)
-router.get("/contact", async (req, res) => {
+// 📝 POST: Crear post de contacto (formulario)
+router.post("/contact", async (req, res) => {
+  const { name, email, message } = req.body;
+  // ❌ Validar que los campos no estén vacíos
+  if (name === "" || email === "" || message === "") {
+    return res.status(400).json({ err: "Rellena todos los campos" });
+  }
+  // ❌ Validar que el email tenga un formato correcto
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    return res.status(400).json({ err: "Email no válido" });
+  }
+
+  // Crear un id único a partir de fecha y hora
+  const date = new Date(fecha);
+  const id = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}-${hora}`; // Formato YYYY-MM-DD-HH:MM
+
+  // ✅ Crear nuevo msg de contacto
   try {
-    return res.json({ msg: "Mensaje enviado correctamente" });
+    const newContacto = new Contacto({
+      id: id,
+      name: name,
+      email: email,
+      message: message,
+    });
+    await newContacto.save();
+    return res.status(201).json({ message: "Mensaje enviado correctamente" });
   } catch (error) {
-    return res.status(500).json({ err: "Error al enviar el mensaje" });
+    return res.status(400).json({
+      err: error.message || "Error del servidor. Inténtalo más tarde",
+    });
   }
 });
 
