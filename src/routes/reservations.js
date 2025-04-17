@@ -74,4 +74,13 @@ router.post("/create", async (req, res) => {
   }
 });
 
+// 📝 Ruta Contacto (formulario)
+router.get("/contact", async (req, res) => {
+  try {
+    return res.json({ msg: "Mensaje enviado correctamente" });
+  } catch (error) {
+    return res.status(500).json({ err: "Error al enviar el mensaje" });
+  }
+});
+
 export default router;
